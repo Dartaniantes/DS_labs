@@ -38,15 +38,15 @@ public class DFS {
         }
     }
 
-    private void printVertexData(Integer v_number, Integer dfs_n, LinkedList<Integer> q) {
+    private void printVertexData(Integer v_number, Integer dfs_n, LinkedList<Integer> s) {
         if (dfs_n != null && dfs_n == 1) {
             System.out.println("DFS data table:");
             System.out.println("X--------------------------------------X");
-            System.out.println("|  Vertex  |  DFS-№  |  Queue content  |");
+            System.out.println("|  Vertex  |  DFS-№  |  Stack content  |");
             System.out.println("X--------------------------------------X");
         }
         System.out.printf("   %4d    |   %4d  |", v_number, dfs_n);
-        System.out.println(" " + q);
+        System.out.println(" " + s);
         System.out.println("----------------------------------------");
     }
 

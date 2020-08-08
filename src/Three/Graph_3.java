@@ -1,12 +1,9 @@
 package Three;
 
-import Auxiliary.Matrix;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
 
 public class Graph_3 {
     private int[][] adjMatrix;
