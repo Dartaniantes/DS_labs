@@ -48,9 +48,6 @@ public class BFS {
             System.out.printf("    %2d    |    %2d    |", v_number, bfs_n);
             System.out.println(" " + q);
             System.out.println("----------------------------------------");
-
-
-
     }
 
 }

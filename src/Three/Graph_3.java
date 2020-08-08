@@ -8,7 +8,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Scanner;
 
-public class Graph_3 implements Comparable{
+public class Graph_3 {
     private int[][] adjMatrix;
     private int v_num, e_num;
     public Vertex[] vertices;
@@ -51,10 +51,6 @@ public class Graph_3 implements Comparable{
         return v_num;
     }
 
-    @Override
-    public int compareTo(Object o) {
-        return 0;
-    }
 
     public class Vertex{
         private int number;
