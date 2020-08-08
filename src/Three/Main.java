@@ -11,11 +11,16 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
-//        System.out.print("Enter input file path --> ");
-//        String path = sc.nextLine();
-        Graph_3 g = new Graph_3("src/Three/input.txt");
+        System.out.println("Enter input graph file path --> ");
+        Graph_3 g = new Graph_3(sc.nextLine());
+
+        BFS bfs = new BFS(g);
         System.out.print("Enter the № of start vertex for BFS bypass --> ");
-        BFS bfs = new BFS(g, sc.nextInt());
+        bfs.bypass(sc.nextInt());
+
+        DFS dfs = new DFS(g);
+        System.out.print("Enter the № of start vertex for DFS bypass --> ");
+        dfs.bypass(sc.nextInt());
     }
 
 }

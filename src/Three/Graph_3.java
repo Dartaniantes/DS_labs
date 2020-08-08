@@ -55,6 +55,16 @@ public class Graph_3 {
     public class Vertex{
         private int number;
         private int bfs_number = 0;
+        private int dfs_number = 0;
+
+        public int getDfs_number() {
+            return dfs_number;
+        }
+
+        public void setDfs_number(int dfs_number) {
+            this.dfs_number = dfs_number;
+        }
+
         private Vertex(int num) {
             this.number = num;
         }

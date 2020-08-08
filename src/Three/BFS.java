@@ -1,53 +1,54 @@
 package Three;
 
 import java.util.LinkedList;
-import java.util.PriorityQueue;
-import java.util.Queue;
 
 public class BFS {
     private Graph_3 g;
-    private LinkedList<Integer> q;
+    private LinkedList<Integer> queue;
 
-    public BFS(Graph_3 g, int start_vertex) {
+    public BFS(Graph_3 g) {
         this.g = g;
-        q = new LinkedList<>();
-        bypass(g.vertices[start_vertex]);
+        queue = new LinkedList<>();
     }
 
-    public void bypass(Graph_3.Vertex start_v) {
+    public void bypass(int start_vertex) {
+        Graph_3.Vertex start_v = g.vertices[start_vertex-1];
         int[][] adjM = g.getAdjMatrix().clone();
         int bfs_n = 1;
         start_v.setBfs_number(bfs_n);
-        q.add(start_v.getNumber());
-        printVertexData(start_v.getNumber(),bfs_n,q);
+        queue.add(start_v.getNumber());
+        printVertexData(start_v.getNumber(),bfs_n, queue);
         bfs_n++;
-        for(int head = q.peek(); q.peek() != null; head = q.peek()) {
+        int head = queue.peek();
+        while(queue.peek() != null) {
             for (int i = 0; i < g.getV_num(); i++){
-                if (adjM[head][i] != 0 && g.vertices[i].getBfs_number() == 0) {
-                    q.add(i);
+                if (adjM[head-1][i] != 0 && g.vertices[i].getBfs_number() == 0) {
+                    queue.add(i+1);
                     g.vertices[i].setBfs_number(bfs_n);
-                    printVertexData(g.vertices[i].getNumber(), bfs_n,q);
+                    printVertexData(g.vertices[i-1].getNumber(), bfs_n, queue);
                     bfs_n++;
                 }
             }
-            q.removeFirst();
-            if(q.element() != null)
-                printVertexData(null,null,q);
+            queue.removeFirst();
+            if(queue.peek() != null){
+                printVertexData(null,null, queue);
+                head = queue.peek();
+            }
             else
                 printVertexData(null,null,null);
         }
     }
 
     private void printVertexData(Integer v_number, Integer bfs_n, LinkedList<Integer> q) {
-        if (bfs_n == 1) {
+        if (bfs_n != null && bfs_n == 1) {
             System.out.println("BFS data table:");
             System.out.println("X--------------------------------------X");
             System.out.println("|  Vertex  |  BFS-№  |  Queue content  |");
             System.out.println("X--------------------------------------X");
         }
-            System.out.printf("    %2d    |    %2d    |", v_number, bfs_n);
-            System.out.println(" " + q);
-            System.out.println("----------------------------------------");
+        System.out.printf("   %4d    |   %4d  |", v_number, bfs_n);
+        System.out.println(" " + q);
+        System.out.println("----------------------------------------");
     }
 
 }
