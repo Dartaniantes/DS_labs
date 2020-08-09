@@ -1,20 +1,33 @@
 package Four_one;
 
-import Three.Graph_3;
-
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 public class Graph_4_1 {
     private int[][] adjMatrix;
     private int v_num, e_num;
-    public Graph_4_1.Vertex[] vertices;
+    public Vertex[] vertices;
+    public Vertex[] v_sorted;
+    LinkedList<Integer> stack;
+    private int dfs_n = 1, ts_n;
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        System.out.print("Enter input graph file path --> ");
+        Graph_4_1 g = new Graph_4_1(sc.nextLine());
+        g.topologicalSort();
+    }
 
     public Graph_4_1(String path) {
         readGraph(path);
+        ts_n = v_num;
+        v_sorted = new Vertex[v_num];
+        stack = new LinkedList<>();
     }
+
 
     private void readGraph(String path) {
         try {
@@ -34,7 +47,7 @@ public class Graph_4_1 {
                 }
             }
             for (int i = 0; i < v_num; i++) {
-                vertices[i] = new Graph_4_1.Vertex(i);
+                vertices[i] = new Vertex(i+1);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -48,6 +61,58 @@ public class Graph_4_1 {
 
     public int getV_num() {
         return v_num;
+    }
+
+    public void topologicalSort() {
+        for (int i = 0; i < v_num; i++) {
+            if (vertices[i].getTs_number() == 0) {
+                dfsBypass(i+1);
+            }
+        }
+        makeSortedGraph();
+        printTopologicallySortedGraph();
+    }
+
+    public void dfsBypass(int start_v) {
+        Vertex focus_v = vertices[start_v - 1];
+        focus_v.dfs_number = dfs_n;
+        stack.add(focus_v.number);
+        while (stack.peekLast() != null){
+            for (int i = 0; i < v_num; i++) {
+                if (adjMatrix[focus_v.number - 1][i] != 0 & vertices[i].dfs_number == 0) {
+                    dfs_n++;
+                    focus_v = vertices[i];
+                    focus_v.dfs_number = dfs_n;
+                    stack.add(i+1);
+                    i = 0;
+                }
+            }
+            if (stack.peekLast() != null) {
+                focus_v.ts_number = ts_n;
+                ts_n--;
+                stack.removeLast();
+                if(stack.peekLast() != null) focus_v = vertices[stack.peekLast() - 1];
+            }
+        }
+    }
+
+    private void makeSortedGraph() {
+        for (int i = 0; i < v_num; i++) {
+            v_sorted[vertices[i].ts_number - 1] = vertices[i];
+        }
+    }
+
+    private void printTopologicallySortedGraph() {
+        for (int i = 0; i < v_num; i++) {
+            if (v_sorted[i].ts_number == 1) {
+                System.out.println("     Topological sort data:");
+                System.out.println("X---------------------------------X");
+                System.out.println("|  Topological sort №  |  Vertex  |");
+                System.out.println("X---------------------------------X");
+            }
+            System.out.printf("|         %2d           |    %2d    |\n", v_sorted[i].ts_number, v_sorted[i].number);
+            System.out.println("|---------------------------------|");
+        }
     }
 
 

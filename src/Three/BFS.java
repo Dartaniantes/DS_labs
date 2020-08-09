@@ -25,7 +25,7 @@ public class BFS {
                 if (adjM[head-1][i] != 0 && g.vertices[i].getBfs_number() == 0) {
                     queue.add(i+1);
                     g.vertices[i].setBfs_number(bfs_n);
-                    printVertexData(g.vertices[i-1].getNumber(), bfs_n, queue);
+                    printVertexData(g.vertices[i].getNumber(), bfs_n, queue);
                     bfs_n++;
                 }
             }

@@ -32,7 +32,7 @@ public class Graph_3 {
                 }
             }
             for (int i = 0; i < v_num; i++) {
-                vertices[i] = new Vertex(i);
+                vertices[i] = new Vertex(i + 1);
             }
         } catch (FileNotFoundException e) {
             e.printStackTrace();
