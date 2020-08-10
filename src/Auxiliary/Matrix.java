@@ -167,6 +167,18 @@ public class Matrix implements Cloneable{
         }
         return transposeMatrix;
     }
+
+    public static int[][] transpose(int[][] matrix){
+        int[][] transposeMatrix = new int[matrix.length][matrix.length];
+
+        for(int i = 0; i<transposeMatrix.length; i++){
+            for(int j = 0; j<transposeMatrix[i].length;j++){
+                transposeMatrix[i][j] = matrix[j][i];
+            }
+        }
+        return transposeMatrix;
+    }
+
     public static Integer[][] booleanTransf(Integer[][] tMatrix){
         for (int i = 0; i < tMatrix.length; i++) {
             for (int j = 0; j < tMatrix[i].length; j++) {
