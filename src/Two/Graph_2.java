@@ -13,6 +13,7 @@ public class Graph_2 {
     private Matrix adjMatrix, distMatrix, reachMatrix;
     private int diametr, radius, center[], tiers[][][];
     private boolean ordered = false;
+    private String connectivity;
 
     public Graph_2(String path) {
         readGraph(path);
@@ -21,11 +22,14 @@ public class Graph_2 {
         initMetricCharacteristics();
     }
 
+
+
     public Graph_2(String path, boolean ordered) {
         this.ordered = ordered;
         readGraph(path);
         initDistanceMatrix();
         initReachabilityMatrix();
+        initConnectivity();
     }
 
     private void readGraph(String f_path) {
@@ -153,13 +157,13 @@ public class Graph_2 {
         }
     }
 
-    private String initConnectivity() {
+    private void initConnectivity() {
         String sc = "stronglyConnected", owc = "oneWayConnected", wc = "weaklyConnected", dc = "disConnected";
         Matrix ones = Matrix.onlyOnesMatrix(adjMatrix);
-        if(reachMatrix.equals(ones)) return sc;
-        else if(reachMatrix.equals(reachMatrix.booleanOr(reachMatrix.transpose())))return owc;
-        else if()
-        return dc;
+        if(reachMatrix.equals(ones)){ this.connectivity = sc;}
+        else if(reachMatrix.equals(reachMatrix.booleanOr(reachMatrix.transpose())))this.connectivity = owc;
+        else if(Matrix.identityMatrix(adjMatrix).booleanOr(adjMatrix).booleanOr(adjMatrix.transpose()).elevate(v_num-1) == Matrix.onlyOnesMatrix(adjMatrix)) this.connectivity = wc;
+        this.connectivity = dc;
     }
 
     public Matrix getDistMatrix() {
@@ -182,5 +186,8 @@ public class Graph_2 {
     }
     public int[][][] getTiers() {
         return tiers;
+    }
+    public String getConnectivity() {
+        return connectivity;
     }
 }

@@ -39,7 +39,7 @@ public class Matrix implements Cloneable{
         }
     }
 
-    public Matrix involuteReturn(int exp) {
+    public Matrix elevate(int exp) {
         Matrix temp = new Matrix(matrix.clone());
         for (int i = 0; i < exp - 1; i++) {
             multiply(temp);
