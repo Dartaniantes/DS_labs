@@ -12,12 +12,20 @@ public class Graph_2 {
     int v_num, e_num;
     private Matrix adjMatrix, distMatrix, reachMatrix;
     private int diametr, radius, center[], tiers[][][];
+    private boolean ordered = false;
 
-    public Graph_2(String input) {
-        readGraph(input);
+    public Graph_2(String path) {
+        readGraph(path);
         initDistanceMatrix();
-        /*initReachabilityMatrix();
-        initMetricCharacteristics();*/
+        initReachabilityMatrix();
+        initMetricCharacteristics();
+    }
+
+    public Graph_2(String path, boolean ordered) {
+        this.ordered = ordered;
+        readGraph(path);
+        initDistanceMatrix();
+        initReachabilityMatrix();
     }
 
     private void readGraph(String f_path) {
@@ -31,15 +39,25 @@ public class Graph_2 {
             adjMatrix = new int[v_num][v_num];
             int start, end;
             int e_counter = 0;
-            while (br.ready()) {
-                String[] u_v_vertexes = br.readLine().split(" ");
-                if(u_v_vertexes.length == 2){
-                    start = Integer.parseInt(u_v_vertexes[0]);
-                    end = Integer.parseInt(u_v_vertexes[1]);
-                    adjMatrix[start-1][end-1] = 1;
-                    adjMatrix[end-1][start-1] = 1;
+            if(!ordered)
+                while (br.ready()) {
+                    String[] u_v_vertexes = br.readLine().split(" ");
+                    if(u_v_vertexes.length == 2){
+                        start = Integer.parseInt(u_v_vertexes[0]);
+                        end = Integer.parseInt(u_v_vertexes[1]);
+                        adjMatrix[start-1][end-1] = 1;
+                        adjMatrix[end-1][start-1] = 1;
+                    }
                 }
-            }
+            else
+                while (br.ready()){
+                    String[] u_v_vertexes = br.readLine().split(" ");
+                    if(u_v_vertexes.length == 2){
+                        start = Integer.parseInt(u_v_vertexes[0]);
+                        end = Integer.parseInt(u_v_vertexes[1]);
+                        adjMatrix[start-1][end-1] = 1;
+                    }
+                }
             this.adjMatrix = new Matrix(adjMatrix);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
@@ -48,7 +66,9 @@ public class Graph_2 {
         }
     }
 
-
+    public int getV_num() {
+        return v_num;
+    }
 
     private void initDistanceMatrix() {
         Matrix d = adjMatrix.cloneMatrix();
@@ -63,24 +83,22 @@ public class Graph_2 {
         Matrix powed = adjMatrix.cloneMatrix();
         for (int pow = 1; pow < v_num; pow++) {
             powed.involute(pow);
-            powed.show();
             for (int i = 0; i < d.getLength(); i++)
                 for (int j = 0; j < d.getWidth(); j++)
                     if (i != j & powed.getElement(i, j) != 0 & d.getElement(i,j) == Integer.MAX_VALUE)
                         d.setElement(i, j, pow);
+            powed = adjMatrix.cloneMatrix();
         }
+        this.distMatrix = d;
     }
-
-
 
     private void initReachabilityMatrix() {
         Matrix r = Matrix.identityMatrix(adjMatrix);
         Matrix clonedAdjMatrix = adjMatrix.cloneMatrix();
-        clonedAdjMatrix.involute(2);
-        Matrix.showMatrix(clonedAdjMatrix);
         for (int n = 1; n < v_num; n++) {
             clonedAdjMatrix.involute(n);
             r = Matrix.booleanOr(r, clonedAdjMatrix);
+            clonedAdjMatrix = adjMatrix.cloneMatrix();
         }
         this.reachMatrix = r;
     }
@@ -89,7 +107,7 @@ public class Graph_2 {
         initDiametr();
         initRadius();
         initCenter();
-//        initTiers();
+        initTiers();
     }
     private void initDiametr(){
         diametr = Arrays.findMax(distMatrix.findRowsMaxs());
@@ -98,40 +116,52 @@ public class Graph_2 {
         radius = Arrays.findMin(distMatrix.findRowsMaxs());
     }
     private void initCenter() {
-        center = Arrays.findMinsIndexes(distMatrix.findRowsMaxs());
+        center = Arrays.iterateEach(Arrays.findMinsIndexes(distMatrix.findRowsMaxs()));
     }
-    /*private void initTiers() {
-        int tiers_num = v_num - 1, tier_vertexes_num = v_num - 1;
-        int tiers[][][] = new int[v_num][tiers_num][tier_vertexes_num];
+    private void initTiers() {
+        int tiers[][][] = new int[v_num][v_num][v_num];
         int tier;
         for (int i = 0; i < distMatrix.getLength(); i++)
             for (int j = 0; j < distMatrix.getWidth(); j++){
-                System.out.println("i = " + i + ", j = " + j);
                 if (i != j) {
-                    tier = distMatrix.getElement(i, j);
-                    System.out.println("Tier = " + tier);
-                    tiers[i][tier][j] = j;
+                    tier = distMatrix.getElement(i, j) - 1;
+                    tiers[i][tier][j] = j + 1;
                 }
             }
         this.tiers = tiers;
-    }*/
+    }
 
     public void showTiers() {
-        int i, j, k;
+        int i, j, k, index;
         for (i = 0; i < tiers.length; i++) {
-            System.out.println("Vertex #" + i + " : ");
+            index = i+1;
+            System.out.println("Vertex #" + index + " : ");
             for (j = 0; j < tiers[i].length; j++) {
-                System.out.println("    > Tier #" + j + " : ");
-                for (k = 0; k < tiers[i][j].length; k++) {
-                    if(k < tiers[0][0].length - 1)
-                        System.out.print(tiers[i][j][k] + ", ");
-                    else
-                        System.out.println(tiers[i][j][k] + "\n");
+                if (Arrays.notOnlyZeros(tiers[i][j])){
+                    index = j + 1;
+                    System.out.print("    > Tier #" + index + " -->");
+                    System.out.print(" | ");
+                    for (k = 0; k < tiers[i][j].length; k++) {
+                        if(tiers[i][j][k] != 0) {
+                            System.out.print(tiers[i][j][k] + " | ");
+                        }
+                    }
+                    System.out.println("\n    ---------------------------");
                 }
             }
+            System.out.println("X------------------------------X");
         }
-
     }
+
+    private String initConnectivity() {
+        String sc = "stronglyConnected", owc = "oneWayConnected", wc = "weaklyConnected", dc = "disConnected";
+        Matrix ones = Matrix.onlyOnesMatrix(adjMatrix);
+        if(reachMatrix.equals(ones)) return sc;
+        else if(reachMatrix.equals(reachMatrix.booleanOr(reachMatrix.transpose())))return owc;
+        else if()
+        return dc;
+    }
+
     public Matrix getDistMatrix() {
         return distMatrix;
     }
@@ -147,7 +177,6 @@ public class Graph_2 {
     public int[] getCenter() {
         return center;
     }
-
     public Matrix getAdjMatrix() {
         return adjMatrix;
     }

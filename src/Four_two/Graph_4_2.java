@@ -19,8 +19,19 @@ public class Graph_4_2 {
     public Graph_4_2(String path) {
         readGraph(path);
         stack = new LinkedList<>();
-        transposedAdjM = Matrix.transpose(adjMatrix);
+        transposedAdjM = transposeMatrix(adjMatrix);
 
+    }
+
+    private int[][] transposeMatrix(int[][] matrix) {
+        int[][] transposeMatrix = new int[matrix.length][matrix.length];
+
+        for(int i = 0; i<transposeMatrix.length; i++){
+            for(int j = 0; j<transposeMatrix[i].length;j++){
+                transposeMatrix[i][j] = matrix[j][i];
+            }
+        }
+        return transposeMatrix;
     }
 
     public static void main(String[] args) {

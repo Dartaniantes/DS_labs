@@ -7,11 +7,19 @@ import java.util.Queue;
 
 public class Debugging {
     public static void main(String[] args) {
-        Queue<Integer> q = new PriorityQueue<>(7);
-        for (int i = 0; i < 5; i++) {
-            q.add(i);
-            System.out.printf(" %2d |",33);
-
+        Graph_2 g = new Graph_2("src/Two/input.txt", false);
+        Matrix a, b;
+        a = g.getAdjMatrix().cloneMatrix();
+        b = g.getAdjMatrix().cloneMatrix();
+        System.out.println("Adj matrix: ");
+        a.show();
+        for (int i = 0; i < g.getV_num(); i++) {
+            System.out.println("A involuted to pow " + i);
+            a.involute(i);
+            a.show();
+            a = g.getAdjMatrix().cloneMatrix();
         }
+
     }
+
 }

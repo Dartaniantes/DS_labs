@@ -84,8 +84,8 @@ public class Matrix implements Cloneable{
                 for (k = 0; k < n; k++) {
                     sum = sum + matrix[i][k] * a[k][j];
                 }
-
                 temp[i][j] = sum;
+                sum = 0;
             }
         }
 
@@ -144,6 +144,25 @@ public class Matrix implements Cloneable{
         return result;
     }
 
+    public Matrix booleanOr(Matrix m) {
+        if (length == m.length & width == m.width) {
+            int[][] intResult = new int[length][width];
+            Matrix result;
+            for (int i = 0; i < m.length; i++)
+                for (int j = 0; j < m.width; j++) {
+                    if (matrix[i][j] > 0 || m.getElement(i, j) > 0)
+                        intResult[i][j] = 1;
+                    else
+                        intResult[i][j] = 0;
+                }
+            result = new Matrix(intResult);
+            return result;
+        } else {
+            System.out.println("Matrices cant be boolean multiplied by the cause of different sizes");
+            return null;
+        }
+    }
+
 
     public int[] findRowsMaxs(){
         int[] rowsMaxs = new int[length];
@@ -155,6 +174,16 @@ public class Matrix implements Cloneable{
             rowsMaxs[i] = max;
         }
         return rowsMaxs;
+    }
+
+    public Matrix transpose() {
+        Matrix transposed = cloneMatrix();
+        for(int i = 0; i<transposed.length; i++){
+            for(int j = 0; j<transposed.width;j++){
+                transposed.setElement(i,j,Integer.valueOf(matrix[j][i]));
+            }
+        }
+        return transposed;
     }
 
     public static Integer[][] transpose(Integer[][] matrix){
@@ -229,12 +258,13 @@ public class Matrix implements Cloneable{
         int[][] cloned = new int[this.length][this.width];
         for (int i = 0; i < this.length; i++) {
             for (int j = 0; j < this.width; j++) {
-                cloned[i][j] = matrix[i][j];
+                cloned[i][j] = Integer.valueOf(matrix[i][j]);
             }
         }
         result = new Matrix(cloned);
         return result;
     }
+
     public static void cloneM1ToM2(int[][] m1,int[][] m2){
         Matrix result;
         for (int i = 0; i < m1.length; i++) {
@@ -295,6 +325,31 @@ public class Matrix implements Cloneable{
         }
         return identity_m;
     }
+
+    public static Matrix onlyOnesMatrix(Matrix m) {
+        Matrix ones = new Matrix(new int[m.length][m.width]);
+        for (int i = 0; i < ones.length; i++) 
+            for (int j = 0; j < ones.width; j++) 
+                ones.setElement(i, j, 1);
+            
+        
+        return ones;
+    }
+
+    public boolean equals(Matrix m) {
+        if(matrix.length == m.length & matrix[0].length == m.width) {
+            for (int i = 0; i < m.length; i++)
+                for (int j = 0; j < m.width; j++)
+                    if (matrix[i][j] == m.getElement(i, j))
+                        continue;
+                    else return false;
+            return true;
+        }
+        else return false;
+    }
+
+
+
 
     public void writeToFile(String path) {
         try (BufferedWriter br = new BufferedWriter(new FileWriter(path))){

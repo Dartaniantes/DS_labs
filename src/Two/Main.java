@@ -15,7 +15,7 @@ public class Main {
         String path;
 //        System.out.print("Enter input graph file path (default : 'src/Two/input.txt') --> ");
 //        path = sc.nextLine();
-        graph = new Graph_2("src/Two/input.txt");
+        graph = new Graph_2("src/Two/input.txt", false);
         int input = 0;
         String output_path;
         System.out.println("Hello");
@@ -69,16 +69,15 @@ public class Main {
 
                 }
                 case 2: {
-                    System.out.println("METRIC CHARACTERISTICS:\n" +
+                    System.out.print("METRIC CHARACTERISTICS:\n" +
                             "   > Diameter = " + graph.getDiametr() + "\n" +
                             "   > Radius = " + graph.getRadius() + "\n" +
                             "   > Graph center : ");
                     Arrays.display(graph.getCenter());
+                    System.out.println("  > Graph tiers : ");
+                    graph.showTiers();
                     System.out.println();
-                    /*System.out.println("Graph's vertexes tiers : ");
-                    graph.showTiers();*/
                 }
-
             }
         }
     }

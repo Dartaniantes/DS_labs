@@ -15,28 +15,49 @@ public class Arrays {
                 min = arr[i];
         return min;
     }
+
+    public static void nullify(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = 0;
+        }
+    }
+
     public static int[] findMinsIndexes(int[] arr) {
         int min = Integer.MAX_VALUE;
         int i, mins_counter = 0;
-        int[] indexes;
+        int[] indxs = new int[arr.length];
         for (i = 0; i < arr.length; i++)
             if(arr[i] < min){
-                if(min == arr[i])
-                    mins_counter++;
+                Arrays.nullify(indxs);
+                mins_counter = 0;
                 min = arr[i];
+                indxs[mins_counter] = i;
+                mins_counter++;
+            } else if (arr[i] == min) {
+                indxs[mins_counter] = i;
+                mins_counter++;
             }
-        indexes = new int[mins_counter];
-        int j;
-        for (j = 0, mins_counter = 0; j < arr.length; j++) {
-            if(arr[j] < min){
-                if(min == arr[i]){
-                    indexes[mins_counter] = arr[i];
-                    mins_counter++;
-                }
-                min = arr[i];
-            }
+
+        int[] indexes = new int[mins_counter];
+        for (int j = 0; j < mins_counter; j++) {
+            indexes[j] = indxs[j];
         }
         return indexes;
+    }
+
+    public static boolean notOnlyZeros(int[] arr) {
+        for (int i = 0; i < arr.length; i++)
+            if (arr[i] != 0)
+                return true;
+        return false;
+    }
+
+    public static int[] iterateEach(int[] arr) {
+        int[] result = new int[arr.length];
+        for (int i = 0; i < arr.length; i++) {
+            result[i] = arr[i] + 1;
+        }
+        return result;
     }
     public static void display(int[] arr) {
         for (int i = 0; i < arr.length; i++)
